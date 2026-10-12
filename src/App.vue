@@ -16,12 +16,14 @@ const date = ref(new Date())
 // 筛选状态
 const onlyImportant = ref(false)
 const plates = ref([])
-const selectedPlate = ref('')
+const selectedPlates = ref([]) // 空数组 = 全部
 const weightStr = '1,2,3'
 
-// "全部" 时传所有板块名拼成的串（接口约定），而非空字符串
+// 未选任何板块时传所有板块名拼成的串（接口约定），而非空字符串
 function plateParam() {
-  return selectedPlate.value || plates.value.map((p) => p.name).join(',')
+  return selectedPlates.value.length
+    ? selectedPlates.value.join(',')
+    : plates.value.map((p) => p.name).join(',')
 }
 
 // 列表数据
@@ -107,8 +109,8 @@ function toggleImportant() {
   refresh()
 }
 
-function selectPlate(name) {
-  selectedPlate.value = name
+function selectPlates(names) {
+  selectedPlates.value = names
   startCount()
   refresh()
 }
@@ -138,11 +140,11 @@ onMounted(async () => {
     :date="date"
     :only-important="onlyImportant"
     :plates="plates"
-    :selected-plate="selectedPlate"
+    :selected-plates="selectedPlates"
     @shift="shift"
     @today="goToday"
     @toggle-important="toggleImportant"
-    @select-plate="selectPlate"
+    @select-plates="selectPlates"
   />
   <div class="stage">
     <DataTable

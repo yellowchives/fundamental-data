@@ -7,9 +7,10 @@ const props = defineProps({
   date: { type: Date, required: true },
   onlyImportant: { type: Boolean, default: false },
   plates: { type: Array, default: () => [] },
-  selectedPlate: { type: String, default: '' }
+  // 已选板块名数组；空数组 = 全部
+  selectedPlates: { type: Array, default: () => [] }
 })
-const emit = defineEmits(['shift', 'today', 'toggle-important', 'select-plate'])
+const emit = defineEmits(['shift', 'today', 'toggle-important', 'select-plates'])
 
 const dateText = computed(() => dstr(props.date))
 const weekText = computed(() => WEEKDAYS[props.date.getDay()])
@@ -33,8 +34,8 @@ const weekText = computed(() => WEEKDAYS[props.date.getDay()])
 
     <PlateFilter
       :plates="plates"
-      :selected="selectedPlate"
-      @select="emit('select-plate', $event)"
+      :selected="selectedPlates"
+      @select="emit('select-plates', $event)"
     />
   </div>
 </template>
