@@ -19,6 +19,11 @@ const plates = ref([])
 const selectedPlate = ref('')
 const weightStr = '1,2,3'
 
+// "全部" 时传所有板块名拼成的串（接口约定），而非空字符串
+function plateParam() {
+  return selectedPlate.value || plates.value.map((p) => p.name).join(',')
+}
+
 // 列表数据
 const list = ref([])
 const loading = ref(false)
@@ -50,7 +55,7 @@ async function refresh() {
   try {
     let data = await fetchList({
       publicTime: yesterdayEndUnix(date.value),
-      plate: selectedPlate.value,
+      plate: plateParam(),
       weight: weightStr
     })
     if (onlyImportant.value) {
